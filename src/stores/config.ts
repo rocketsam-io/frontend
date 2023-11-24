@@ -42,7 +42,7 @@ export const useConfigStore = defineStore('config', {
   },
 
   actions: {
-    setCurrentSiteChain(chain: string | number) {
+    setSiteChain(chain: string | number) {
       const availiableChain = this.chains.find(
         (c) =>
           c.id === chain ||
@@ -54,14 +54,19 @@ export const useConfigStore = defineStore('config', {
       if (availiableChain) {
         if (this.logs) console.log('Set current site chain:', availiableChain.fullname)
         this.currentChain = availiableChain
-
+      }
+      return availiableChain
+    },
+    setCurrentSiteChain(chain: string | number) {
+      const newChain = this.setSiteChain(chain)
+      if (newChain) {
         const page = this.router.currentRoute.value.name?.toString()
         if (this.logs) console.log('Current page namespace:', page)
         if (page && ['Leaderboard', 'Pools'].includes(page))
           this.router.push({
             name: page,
             params: {
-              chain: availiableChain.name.toLowerCase()
+              chain: newChain.name.toLowerCase()
             }
           })
       }

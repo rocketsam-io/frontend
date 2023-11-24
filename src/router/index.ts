@@ -16,12 +16,12 @@ const router = createRouter({
       name: 'Pools',
       component: Pools,
       beforeEnter: (to, from, next) => {
-        const { logs, setCurrentSiteChain } = useConfigStore()
+        const { logs, setSiteChain } = useConfigStore()
         if (logs) console.log('Enter by route:', to.params.chain)
         if (to.params.chain) {
-          setCurrentSiteChain(to.params.chain as string)
+          setSiteChain(to.params.chain as string)
         }
-        return next()
+        next()
       }
     },
     {
@@ -29,12 +29,12 @@ const router = createRouter({
       name: 'Leaderboard',
       component: Leaderboard,
       beforeEnter: (to, from, next) => {
-        const { logs, setCurrentSiteChain } = useConfigStore()
+        const { logs, setSiteChain } = useConfigStore()
         if (logs) console.log('Enter by route:', to.params.chain)
         if (to.params.chain) {
-          setCurrentSiteChain(to.params.chain as string)
+          setSiteChain(to.params.chain as string)
         }
-        return next()
+        next()
       }
     },
     // Fallback route for handling 404s

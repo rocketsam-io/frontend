@@ -10,7 +10,7 @@ const { user } = defineProps(['user'])
 const boostClass = (boost: number) => {
   if (boost > 3) return 'green'
   else if (boost > 2) return 'yellow'
-  else if (boost > 1) return 'red'
+  else if (boost > 1.25) return 'red'
   else return 'none'
 }
 
