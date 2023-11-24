@@ -14,9 +14,9 @@ a.popup(v-if="params.hash" target="_blank" :href="url")
 
 <script setup lang="ts">
 import { ref, computed } from 'vue'
-import { useConfigStore } from '@/stores/config'
+import { useChainsStore } from '@/stores/config'
 
-const config = useConfigStore()
+const config = useChainsStore()
 
 // Time
 const creationTime = ref(Date.now())

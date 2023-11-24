@@ -1,9 +1,9 @@
 import { useEvmStore } from './evm'
 import { useStarknetStore } from './starknet'
-import { useConfigStore } from './config'
+import { useChainsStore } from './config'
 
 export default {
-  useConfigStore,
+  useChainsStore,
   useEvmStore,
   useStarknetStore
 }

@@ -2,7 +2,7 @@
 import FuelBar from '@/components/FuelBar.vue'
 
 import { onBeforeMount, onMounted, onUnmounted, ref, watch } from 'vue'
-import { useConfigStore } from '@/stores/config'
+import { useChainsStore } from '@/stores/config'
 import { useEvmStore } from '@/stores/evm'
 import { useRoute } from 'vue-router'
 
@@ -13,7 +13,7 @@ import { Network } from 'ethers'
 import PoolRow from '@/components/SinglePool.vue'
 import type { Currency, Pool } from '@/types'
 
-const config = useConfigStore()
+const config = useChainsStore()
 const evm = useEvmStore()
 
 const poolNames = [

@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { Sam } from '@/onchain/utils'
-import { useConfigStore } from '@/stores/config'
+import { useChainsStore } from '@/stores/config'
 import { useEvmStore } from '@/stores/evm'
 import type { Pool } from '@/types'
 import { useOnboard } from '@web3-onboard/vue'
@@ -15,7 +15,7 @@ const { visible, pool } = defineProps(['visible', 'pool'])
 const emit = defineEmits(['toggle', 'updatePool'])
 const opened = ref(visible)
 
-const config = useConfigStore()
+const config = useChainsStore()
 const evm = useEvmStore()
 const toast = useToast()
 

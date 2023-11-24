@@ -10,7 +10,7 @@ type Config = {
   currentChain: Chain
 }
 
-export const useConfigStore = defineStore('config', {
+export const useChainsStore = defineStore('config', {
   state: (): Config => ({
     settings: {
       fuel: parseFloat(import.meta.env.VITE_FUEL) || 1,

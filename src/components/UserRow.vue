@@ -1,10 +1,10 @@
 <script setup lang="ts">
 import { formatAddress } from '@/onchain/utils'
-import { useConfigStore } from '@/stores/config'
+import { useChainsStore } from '@/stores/config'
 import { useEvmStore } from '@/stores/evm'
 
 const evm = useEvmStore()
-const config = useConfigStore()
+const config = useChainsStore()
 const { user } = defineProps(['user'])
 
 const boostClass = (boost: number) => {

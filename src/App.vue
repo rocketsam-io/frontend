@@ -5,12 +5,12 @@ import LayoutHeader from './components/LayoutHeader.vue'
 import { init, useOnboard } from '@web3-onboard/vue'
 import injectedModule from '@web3-onboard/injected-wallets'
 
-import { useConfigStore } from '@/stores/config'
+import { useChainsStore } from '@/stores/config'
 import { watch } from 'vue'
 import { useEvmStore } from '@/stores/evm'
 import type { ConnectedChain, WalletState } from '@web3-onboard/core'
 
-const config = useConfigStore()
+const config = useChainsStore()
 const evm = useEvmStore()
 
 // Initialize chains

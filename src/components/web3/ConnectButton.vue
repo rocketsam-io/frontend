@@ -2,14 +2,14 @@
 import { ref, computed, watch } from 'vue'
 import ConnectorsModal from '@/components/web3/ConnectorsModal.vue'
 
-import { useConfigStore } from '@/stores/config'
+import { useChainsStore } from '@/stores/config'
 import { useEvmStore } from '@/stores/evm'
 
 import { formatAddress } from '@/onchain/utils'
 import { useOnboard } from '@web3-onboard/vue'
 import { useStarknetStore } from '@/stores/starknet'
 
-const config = useConfigStore()
+const config = useChainsStore()
 const evm = useEvmStore()
 const starknet = useStarknetStore()
 
