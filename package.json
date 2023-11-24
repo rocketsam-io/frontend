@@ -14,7 +14,7 @@
     "generate-types": "typechain --target=ethers-v6 './src/abi/**/*.json' --out-dir ./src/types/ethers-contracts",
     "deploy_dev": "git add . && git commit -m 'deploy to develop' && git push origin main && caprover deploy -n rocket -a develop --default && npm run logs_dev",
     "logs_dev": "ssh root@captain.panel.rocketsam.io 'docker service logs srv-captain--develop --follow --no-task-ids'",
-    "deploy_production": "caprover deploy -n rocket -a frontend --default && npm run logs",
+    "deploy_production": "caprover deploy -n rocket -a frontend --default && npm run logs_production",
     "logs_production": "ssh root@captain.panel.rocketsam.io 'docker service logs srv-captain--production --follow --no-task-ids'"
   },
   "dependencies": {
