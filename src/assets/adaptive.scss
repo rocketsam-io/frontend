@@ -1,0 +1,34 @@
+@media screen and (max-width: 768px) {
+  html {
+    font-size: 14px;
+  }
+  .logo {
+    max-height: 2.5rem;
+  }
+  th.sortable .icon {
+    visibility: hidden;
+    display: none;
+  }
+  .button.is-fullwidth-mobile {
+    display: flex;
+    width: 100%;
+  }
+}
+
+@media screen and (min-width: 1024px) {
+  html {
+    font-size: 15px;
+  }
+}
+
+@media screen and (min-width: 1216px) {
+  html {
+    font-size: 16px;
+  }
+}
+
+@media screen and (min-width: 1408px) {
+  html {
+    font-size: 17px;
+  }
+}

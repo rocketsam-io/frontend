@@ -1,0 +1,120 @@
+.modal-close {
+  position: absolute;
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.04);
+  }
+
+  right: 1.125rem;
+  top: 1.125rem;
+
+  &.is-large {
+    height: 2rem;
+    max-height: 2rem;
+    max-width: 2rem;
+    min-height: 2rem;
+    min-width: 2rem;
+    width: 2rem;
+  }
+}
+
+.modal {
+  .modal-content {
+    text-align: left;
+    max-width: 29rem;
+    padding: 1.5rem;
+    border-radius: 2rem;
+    background: #2a2a31;
+    box-shadow: 0px 8px 7px 0px rgba(12, 12, 21, 0.32);
+
+    .title {
+      color: #fff;
+      font-size: 1.25rem;
+      font-weight: 600;
+      padding-right: 2rem;
+      span {
+        white-space: nowrap;
+      }
+    }
+
+    .subtitle {
+      display: flex;
+      align-items: center;
+      color: #fff;
+      font-size: 0.875rem;
+      font-weight: 600;
+      margin-bottom: 0.8rem;
+
+      .icon {
+        margin-left: 0.5rem;
+        font-size: 0.875rem;
+        width: 0.625rem;
+        height: 0.625rem;
+      }
+    }
+
+    .is-ghost {
+      padding: 0.62rem;
+      height: auto;
+
+      .icon {
+        margin-left: 0;
+        margin-right: 0.5rem;
+        width: 2rem;
+        height: 2rem;
+      }
+
+      &:hover {
+        background: rgba(255, 255, 255, 0.04);
+      }
+    }
+
+    .level {
+      margin-bottom: 0.5rem;
+      color: #fff;
+      font-size: 0.875rem;
+      font-weight: 600;
+    }
+
+    .control {
+      position: relative;
+
+      .network {
+        width: 1.5rem;
+        height: 1.5rem;
+      }
+
+      .input {
+        z-index: 1;
+        border-radius: 0.75rem;
+        background: rgba(255, 255, 255, 0.04);
+
+        color: #fff;
+        font-size: 1.25rem;
+        font-weight: 600;
+
+        &::placeholder {
+          color: rgba(255, 255, 255, 0.4);
+        }
+      }
+
+      .icon.max {
+        pointer-events: all;
+        cursor: pointer;
+        z-index: 41;
+        height: 100%;
+        padding: 0.5rem 0.75rem;
+        right: 0.75rem;
+
+        color: #fff;
+        text-align: center;
+        font-size: 0.875rem;
+        font-weight: 600;
+
+        &:hover {
+          color: #ff3200;
+        }
+      }
+    }
+  }
+}
