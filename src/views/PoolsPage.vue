@@ -88,7 +88,7 @@ section.section
         thead
           tr
             th(align="left") Pool
-            th(align="center" alt="Your balance in Pool") Balance
+            th(align="center" alt="Your balance in Pool") Your Balance
             th(align="center" alt="Your volume in Pool") Your Volume
             th(align="center" alt="Total Pool volume") Pool Volume
             th(align="right") &nbsp;
