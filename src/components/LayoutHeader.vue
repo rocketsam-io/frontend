@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref } from 'vue'
-import { useChainsStore } from '@/stores/config'
+import { useConfigStore } from '@/stores/config'
 
 import SelectNetwork from '@/components/web3/SelectNetwork.vue'
 import ConnectButton from '@/components/web3/ConnectButton.vue'
@@ -8,7 +8,7 @@ import ConnectButton from '@/components/web3/ConnectButton.vue'
 import { useRoute } from 'vue-router'
 
 const route = useRoute()
-const { onboardChains } = useChainsStore()
+const { onboardChains } = useConfigStore()
 
 // Navbar toggler
 document.addEventListener('DOMContentLoaded', () => {
@@ -23,7 +23,7 @@ document.addEventListener('DOMContentLoaded', () => {
   })
 })
 
-const config = useChainsStore()
+const config = useConfigStore()
 
 </script>
 

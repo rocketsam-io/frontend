@@ -14,9 +14,9 @@ a.popup(v-if="params.hash" target="_blank" :href="url")
 
 <script setup lang="ts">
 import { ref, computed } from 'vue'
-import { useChainsStore } from '@/stores/config'
+import { useConfigStore } from '@/stores/config'
 
-const config = useChainsStore()
+const config = useConfigStore()
 
 // Time
 const creationTime = ref(Date.now())
@@ -37,7 +37,6 @@ const timeMessage = computed(() =>
 // Explorer
 const { msg, params } = defineProps(['msg', 'params'])
 const url = computed(() => config.currentChain.blockExplorerUrl + '/tx/' + params.hash)
-console.log(params)
 
 </script>
 

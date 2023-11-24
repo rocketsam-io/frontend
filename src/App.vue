@@ -5,17 +5,17 @@ import LayoutHeader from './components/LayoutHeader.vue'
 import { init, useOnboard } from '@web3-onboard/vue'
 import injectedModule from '@web3-onboard/injected-wallets'
 
-import { useChainsStore } from '@/stores/config'
+import { useConfigStore } from '@/stores/config'
 import { watch } from 'vue'
 import { useEvmStore } from '@/stores/evm'
 import type { ConnectedChain, WalletState } from '@web3-onboard/core'
 
-const config = useChainsStore()
+const config = useConfigStore()
 const evm = useEvmStore()
 
 // Initialize chains
 config.init()
-console.log('Active chains:', config.onboardChains.map(i => i.label).join(', '))
+if (config.logs) console.log('Active chains:', config.onboardChains.map(i => i.label).join(', '))
 
 // Initalize connector
 const injected = injectedModule()
@@ -38,16 +38,16 @@ init({
 })
 
 const {
-  connectWallet,
   connectedWallet,
   connectedChain
 } = useOnboard()
 
 watch(connectedWallet, (wallet: WalletState | null) => {
-  console.log('11111', wallet)
+  if (config.logs) console.log('Set wallet from provider', wallet)
   if (wallet) evm.setWallet(wallet)
 })
 watch(connectedChain, (chain: ConnectedChain | null) => {
+  if (config.logs) console.log('Set chain from provider', chain)
   if (chain) evm.setChain(chain.id)
 })
 

@@ -4,13 +4,13 @@ import FuelBar from '@/components/FuelBar.vue'
 import UserRow from '@/components/UserRow.vue'
 
 import { formatAddress } from '@/onchain/utils'
-import { useChainsStore } from '@/stores/config'
+import { useConfigStore } from '@/stores/config'
 
 import axios from 'axios'
 import { useEvmStore } from '@/stores/evm'
 import type { User } from '@/types'
 
-const config = useChainsStore()
+const config = useConfigStore()
 const evm = useEvmStore()
 
 const leaderboard = ref<User[]>([])

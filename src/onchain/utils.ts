@@ -11,11 +11,9 @@ export const formatAddress = (address: string, from = 6, to = 5, uppercase = fal
 }
 
 export const Sam = (address: string, chain: number, signer?: Signer | Provider) => {
-  console.log('Create contract', address, chain, signer)
   if (!signer) {
     const network = ACTIVE_CHAINS.find((i) => i.id === chain) as Chain
     signer = new JsonRpcProvider(network.rpcUrl)
   }
-
   return RocketSam__factory.connect(address, signer) as RocketSam
 }

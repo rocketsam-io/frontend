@@ -2,7 +2,7 @@
 import FuelBar from '@/components/FuelBar.vue'
 
 import { onBeforeMount, onMounted, onUnmounted, ref, watch } from 'vue'
-import { useChainsStore } from '@/stores/config'
+import { useConfigStore } from '@/stores/config'
 import { useEvmStore } from '@/stores/evm'
 import { useRoute } from 'vue-router'
 
@@ -13,7 +13,7 @@ import { Network } from 'ethers'
 import PoolRow from '@/components/SinglePool.vue'
 import type { Currency, Pool } from '@/types'
 
-const config = useChainsStore()
+const config = useConfigStore()
 const evm = useEvmStore()
 
 const poolNames = [
@@ -42,7 +42,7 @@ currency.value = config.currentChain.nativeCurrency
 
 const fetchPools = async (eventMessage: string) => {
   const chain = config.currentChain
-  console.log('Fetch RocketSam Pools for', chain.fullname, 'after', eventMessage)
+  if (config.logs) console.log('Fetch RocketSam Pools for', chain.fullname, 'after', eventMessage)
   loading.value = true
   const data = chain.contracts
     .map((contract, i) => ({
@@ -60,13 +60,13 @@ const newChainFetchPools = (eventMessage: string) => {
 }
 
 watch(() => config.currentChain, (newChain) => {
-  console.log('Current chain', newChain.name, pools.value.length)
+  if (config.logs) console.log('Current chain', newChain.name, pools.value.length)
   newChainFetchPools('change/update current chain')
 })
 
 const route = useRoute()
 watch(route, (newRoute) => {
-  console.log('Route change', newRoute, pools.value.length)
+  if (config.logs) console.log('Route change', newRoute, pools.value.length)
   newChainFetchPools('change/update route')
 })
 
@@ -95,7 +95,7 @@ section.section
         tbody
           PoolRow(
             v-for="pool in pools"
-            :key="pool.blockExplorerUrl"
+            :key="pool.name"
             :currency="currency"
             :pool="pool"
             @updatePools="fetchPools('user deposit')"

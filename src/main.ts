@@ -35,4 +35,6 @@ app.use(Toast, {
   closeButtonClassName: 'modal-close is-large'
 })
 
+app.config.globalProperties.DEV = import.meta.env.VITE_DEV
+
 app.mount('#app')

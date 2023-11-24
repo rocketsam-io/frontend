@@ -35,7 +35,6 @@ export const useEvmStore = defineStore('evm', {
     },
     setChain(chain: any) {
       this.chain = chain?.id || chain
-      console.log(this.chain)
     },
     getSinger() {}
   }

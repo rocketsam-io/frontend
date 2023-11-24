@@ -5,13 +5,15 @@ import { defineStore } from 'pinia'
 const DEV = import.meta.env.DEV
 
 type Config = {
+  logs: boolean
   settings: any
   chains: Chain[]
   currentChain: Chain
 }
 
-export const useChainsStore = defineStore('config', {
+export const useConfigStore = defineStore('config', {
   state: (): Config => ({
+    logs: import.meta.env.VITE_DEV === 'true' ? true : false,
     settings: {
       fuel: parseFloat(import.meta.env.VITE_FUEL) || 1,
       season: parseInt(import.meta.env.VITE_SEASON) || 1,
@@ -41,13 +43,20 @@ export const useChainsStore = defineStore('config', {
 
   actions: {
     setCurrentSiteChain(chain: string | number) {
-      const availiableChain = this.chains.find((c) => c.id === chain || c.chainId === chain)
+      const availiableChain = this.chains.find(
+        (c) =>
+          c.id === chain ||
+          c.chainId === chain ||
+          c.name.toLowerCase() === String(chain).toLowerCase()
+      )
+      if (this.logs) console.log('Chain availiable:', chain, availiableChain)
+
       if (availiableChain) {
-        console.log('Set current site chain:', availiableChain.fullname)
+        if (this.logs) console.log('Set current site chain:', availiableChain.fullname)
         this.currentChain = availiableChain
 
         const page = this.router.currentRoute.value.name?.toString()
-        console.log('Current page namespace:', page)
+        if (this.logs) console.log('Current page namespace:', page)
         if (page && ['Leaderboard', 'Pools'].includes(page))
           this.router.push({
             name: page,

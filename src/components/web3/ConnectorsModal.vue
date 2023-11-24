@@ -2,13 +2,13 @@
 import IconConnected from '@/components/icons/IconConnected.vue'
 import { useOnboard } from '@web3-onboard/vue'
 
-import { useChainsStore } from '@/stores/config'
+import { useConfigStore } from '@/stores/config'
 import { ref, watch, defineProps } from 'vue'
 
 import { useEvmStore } from '@/stores/evm'
 import { useStarknetStore } from '@/stores/starknet'
 
-const config = useChainsStore()
+const config = useConfigStore()
 const evm = useEvmStore()
 const starknet = useStarknetStore()
 

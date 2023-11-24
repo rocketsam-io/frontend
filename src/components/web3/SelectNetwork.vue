@@ -20,13 +20,13 @@ import IconCheck from '@/components/icons/IconCheck.vue'
 import { watch } from 'vue'
 import { useOnboard } from '@web3-onboard/vue'
 
-import { useChainsStore } from '@/stores/config'
+import { useConfigStore } from '@/stores/config'
 import { useEvmStore } from '@/stores/evm'
 import type { Chain } from '@/types'
 import type { ConnectedChain } from '@web3-onboard/core'
 
 const { connectedWallet, connectedChain, setChain } = useOnboard()
-const config = useChainsStore()
+const config = useConfigStore()
 const evm = useEvmStore()
 
 const changeChain = (chain: Chain) => {
@@ -35,7 +35,7 @@ const changeChain = (chain: Chain) => {
 }
 
 watch(connectedChain, (newValue: ConnectedChain | null) => {
-  console.log('Route change:', newValue)
+  if (config.logs) console.log('Route change:', newValue)
   if (newValue) config.setCurrentSiteChain(parseInt(newValue.id))
 })
 

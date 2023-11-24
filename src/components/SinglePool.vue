@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { BrowserProvider } from 'ethers'
 import { formatUnits } from 'ethers'
-import { onBeforeMount, onMounted, onUnmounted, reactive, ref, watch } from 'vue'
+import { onMounted, onUnmounted, ref, watch } from 'vue'
 import { useToast } from "vue-toastification"
 
 import Toast from '@/components/CustomToast.vue'
@@ -9,9 +9,9 @@ import DepositModal from '@/components/DepositModal.vue'
 
 import type { Pool } from '@/types'
 import { useEvmStore } from '@/stores/evm'
-import { RocketSam__factory } from '@/types/ethers-contracts'
 import { useOnboard } from '@web3-onboard/vue'
 import { Sam } from '@/onchain/utils'
+import { useConfigStore } from '@/stores/config'
 
 const { pool } = defineProps<{
   pool: Pool
@@ -21,7 +21,9 @@ const emit = defineEmits(['updatePools'])
 // Tostification
 const toast = useToast()
 const evm = useEvmStore()
-const { connectedWallet, connectedChain, setChain } = useOnboard()
+const config = useConfigStore()
+
+const { setChain } = useOnboard()
 
 const showToast = (msg: string, params?: any) => toast({
   component: Toast,
@@ -44,7 +46,7 @@ let rowInfo = ref<PoolRow>({
 })
 const fetchPool = async (eventMessage: string) => {
   if (pool && pool.contract) {
-    console.log('Fetch pool', eventMessage)
+    if (config.logs) console.log('Fetch pool', eventMessage)
     try {
       rowInfo.value = {
         balance: evm.address ? await pool.contract.balances(evm.address) : 0n,
@@ -57,11 +59,7 @@ const fetchPool = async (eventMessage: string) => {
   }
 }
 
-//onBeforeMount(() => fetchPool('before mount'))
-watch(() => pool, (change) => {
-  console.log(change)
-  fetchPool('pool changed')
-})
+watch(() => pool, () => fetchPool('pool changed'))
 
 let intervalId: any
 onMounted(() => {
