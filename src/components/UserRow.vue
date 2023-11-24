@@ -14,14 +14,11 @@ const boostClass = (boost: number) => {
   else return 'none'
 }
 
-const isCurrentUser = () =>
-  user?.address?.toLowerCase() === evm?.address?.toLowerCase()
-
 </script>
 
 <template lang="pug">
 tr(
-  :class="{ 'is-selected': isCurrentUser() }"
+  :class="{ 'is-selected': user?.address?.toLowerCase() === evm?.address?.toLowerCase() }"
 )
   td.position(align="center" :class="{ 'has-text-primary has-text-bold': !user.rank }") {{ user.rank || 'UNRANKED' }}
   td(align="center") {{ formatAddress(user.address) }}
