@@ -6,10 +6,6 @@ import { useConfigStore } from '@/stores/config'
 import { useEvmStore } from '@/stores/evm'
 import { useRoute } from 'vue-router'
 
-import { JsonRpcProvider } from 'ethers'
-import { RocketSam__factory, type RocketSam } from '@/types/ethers-contracts'
-import { Network } from 'ethers'
-
 import PoolRow from '@/components/SinglePool.vue'
 import type { Currency, Pool } from '@/types'
 

@@ -11,7 +11,7 @@ export type Chain = {
   id: number
   chainId: string
   name: string
-  chainType: 'evm' | 'starknet'
+  chainType: 'evm'
   icon: string
   fullname: string
   network: 'Mainnet' | 'Testnet'

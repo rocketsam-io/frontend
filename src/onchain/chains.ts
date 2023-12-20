@@ -104,7 +104,8 @@ const allChains: any[] = [
       decimals: 18
     },
     rpcUrl: 'https://rpc.mantle.xyz',
-    blockExplorerUrl: 'https://explorer.mantle.xyz'
+    blockExplorerUrl: 'https://explorer.mantle.xyz',
+    pools: ['0x1077df51A4059477826549101a30a70b9579A08B']
   },
   {
     id: 7001,
@@ -354,22 +355,6 @@ const allChains: any[] = [
       '0x1feF777Fb93Aa45a6Cefcf5507c665b64b301FB3',
       '0x80C7E6B91a33b2D956F01092B1E60EEc6e957dc9'
     ]
-  },
-  {
-    id: 2344859429196833,
-    name: 'Starknet',
-    chainType: 'starknet',
-    icon: 'starknet.svg',
-    fullname: 'Starknet',
-    network: 'Mainnet',
-    website: 'https://starknet.io',
-    nativeCurrency: {
-      name: 'ETH',
-      symbol: 'ETH',
-      decimals: 18
-    },
-    rpcUrl: 'https://starknet-mainnet.public.blastapi.io',
-    blockExplorerUrl: 'https://starkscan.co/'
   }
 ]
 
