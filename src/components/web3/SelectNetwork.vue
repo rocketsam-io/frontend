@@ -1,10 +1,10 @@
 <template lang="pug">
-.chains.navbar-item.has-dropdown.is-hoverable
-  .navbar-link
+.chains.navbar-item.is-hoverable(:class="{ 'has-dropdown': config.allChains.length > 1 }")
+  .navbar-link(:class="{ 'is-arrowless': config.allChains.length === 1 }")
     span.icon 
       img(:src="'/assets/chains/' + config.currentChain.icon")
     span {{ config.currentChain.fullname }}
-  .navbar-dropdown.is-boxed.is-right(v-if="config.allChains.length > 0")
+  .navbar-dropdown.is-boxed.is-right(v-if="config.allChains.length > 1")
     .items
       .navbar-item(v-for="chain in config.allChains" @click="changeChain(chain)")
         span.icon
@@ -45,7 +45,7 @@ watch(connectedChain, (newValue: ConnectedChain | null) => {
 .navbar-menu {
 
   .navbar-link {
-    min-width: 11rem;
+    // min-width: 9rem;
     height: 2.75rem;
 
     &:not(.is-arrowless)::after {
@@ -87,7 +87,7 @@ watch(connectedChain, (newValue: ConnectedChain | null) => {
       padding-left: 0.25rem;
       align-self: center;
 
-      &.navbar-item.has-dropdown.is-hoverable {
+      &.navbar-item.is-hoverable {
 
         .navbar-link {
           border-radius: 0.75rem;
