@@ -28,11 +28,16 @@ const {
 
 const switchNetwork = () => setChain({ wallet: evm.wallet.label, chainId: config.currentChain.chainId })
 
+const currentAddress = () => {
+  if (config.currentChain.chainType === 'evm')
+    return evm.address ? evm.formatted : 'Connect EVM'
+  else
+    return starknet.address ? starknet.formatted : 'Connect Starknet'
+}
+
 // Connector modal or blocknative directly
 const active = ref(false)
-const toggle = async () => {
-  if (!config.settings.starknet)
-    return connectWallet()
+const toggleConnectModal = async () => {
   active.value = !active.value
 }
 
@@ -40,19 +45,22 @@ const toggle = async () => {
 
 <template lang="pug">
 .navbar-item
-  ConnectorsModal(v-if="!config.settings.starknet" :active="active" @toggle="toggle()")
+  ConnectorsModal(:active="active" @toggle="toggleConnectModal()")
   .button.is-primary.is-rounded(
     v-if="!evm.address && !starknet.address"
-    @click="toggle()"
-  ) {{ connectingWallet ? 'Connecting...' : 'Connect wallet' }}
-  .buttons.has-addons(v-else)
-    .button.is-rounded(v-if="connectedWallet" @click="!evm.chainInfo ? switchNetwork() :toggle()")
-      .icon(v-if="!evm.chainInfo")
-        img(v-if="evm.chainInfo" :src="'/assets/chains/' + evm.chainInfo?.icon")
-        img(v-else src="/assets/chains/switch.svg" alt='Switch Network' @click="switchNetwork()")
-      span {{ evm.formatted }}
-    .button.is-rounded(v-else @click="toggle()") Connect EVM
-    .button.is-rounded(v-if="config.settings.starknet" @click="toggle()" disabled) Connect StarkNet
+    @click="toggleConnectModal()"
+  ) {{ connectingWallet ? 'Connecting...' : 'Connect wallets' }}
+  .button.is-rounded(v-else @click="toggleConnectModal()") {{ currentAddress() }}
+  //- .buttons.has-addons(v-else)
+  //-   .button.is-rounded(v-if="connectedWallet" @click="!evm.chainInfo ? switchNetwork() :toggleConnectModal()")
+  //-     .icon(v-if="!evm.chainInfo")
+  //-       img(v-if="evm.chainInfo" :src="'/assets/chains/' + evm.chainInfo?.icon")
+  //-       img(v-else src="/assets/chains/switch.svg" alt='Switch Network' @click="switchNetwork()")
+  //-     span {{ evm.formatted }}
+  //-   .button.is-rounded(v-else @click="toggleConnectModal()") Connect EVM
+
+  //-   .button.is-rounded(@click="toggleConnectModal()")
+  //-     span {{ starknet.address ? starknet.formatted : 'Connect Starknet' }}
 
 </template>
 
@@ -61,32 +69,37 @@ const toggle = async () => {
   height: 2.75rem;
 }
 
-.buttons.has-addons {
-  .button {
-    color: #fff;
-    background: rgba(255, 255, 255, 0.08);
-    border: none;
+// .buttons.has-addons {
+.button {
+  color: #fff;
+  background: rgba(255, 255, 255, 0.08);
+  border: none;
 
-    &:not(:last-child) {
-      margin-right: 1px;
-    }
+  &:not(:last-child) {
+    margin-right: 1px;
+  }
 
-    .icon {
-      margin-right: 0.5rem;
+  .icon {
+    margin-right: 0.5rem;
 
-      img {
-        width: 1rem;
-        height: 1rem;
-      }
-    }
-
-    &:hover {
-      background: rgba(255, 255, 255, 0.16);
-    }
-
-    .is-active {
-      background: rgba(255, 255, 255, 0.16);
+    img {
+      width: 1rem;
+      height: 1rem;
     }
   }
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.16);
+  }
+
+  .is-active {
+    background: rgba(255, 255, 255, 0.16);
+  }
+
+  span {
+    margin-right: 0;
+  }
 }
+
+// }
 </style>

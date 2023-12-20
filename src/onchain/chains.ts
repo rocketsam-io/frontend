@@ -2,6 +2,8 @@ import type { Chain } from '@/types'
 import { JsonRpcProvider } from 'ethers'
 import { Network } from 'ethers'
 import { RocketSam__factory, type RocketSam } from '@/types/ethers-contracts'
+import { Contract, RpcProvider } from 'starknet'
+import { STARK_ABI } from '@/abi/RocketStark'
 
 const allChains: any[] = [
   {
@@ -162,6 +164,39 @@ const allChains: any[] = [
     ]
   },
   {
+    id: 84531,
+    name: 'Base',
+    chainType: 'evm',
+    icon: 'base.svg',
+    fullname: 'Base Goerli',
+    network: 'Testnet',
+    website: 'https://base.org',
+    nativeCurrency: {
+      name: 'ETH',
+      symbol: 'ETH',
+      decimals: 18
+    },
+    rpcUrl: 'https://base-goerli.public.blastapi.io',
+    blockExplorerUrl: 'https://goerli.basescan.org',
+    features: [
+      {
+        name: 'EIP1559'
+      }
+    ],
+    pools: [
+      '0xd5BAdDE807E059d50fF1d08661Dd77E6a2AfcA98',
+      '0x07651807730c8895113ceC94800d5d46Fca33199',
+      '0x06C237E66e484cC0e13Da7D8Fc24EC1B1fBfC216',
+      '0x1F88e60017C55f3CD3E4d52ac7052da137D9D9CA',
+      '0xABC01b410be5480Bf8d2276eC009c763323B4b4C',
+      '0x4A032FE0EA97B0f57836f06674C4e3c47f42FAF3',
+      '0xCA18C57f85D2B6b63cC61351421D8876B80c51D6',
+      '0xFfe2DEf25e47Df9D85CdF5609379Eddbef6E170F',
+      '0xFdec847dd0ccf907580d2253b2F39A728b9E8883',
+      '0xF1A565b5e3EA93D9a4d61A0304029a92C7ebbb52'
+    ]
+  },
+  {
     id: 42161,
     name: 'Arbitrum',
     chainType: 'evm',
@@ -192,6 +227,39 @@ const allChains: any[] = [
       '0x5aD05713f9e2dF30834913d3f94f0fDc27e49031',
       '0x363df9b72EC83c7d4Fd60A61eF4629BFdc8A7Dbf',
       '0xAb8848bB1883B2b5DfEb170D8362667e937cdd36'
+    ]
+  },
+  {
+    id: 421613,
+    name: 'Arbitrum',
+    chainType: 'evm',
+    icon: 'arbitrum.svg',
+    fullname: 'Arbitrum One Goerli',
+    network: 'Testnet',
+    website: 'https://arbitrum.io',
+    nativeCurrency: {
+      name: 'Ether',
+      symbol: 'ETH',
+      decimals: 18
+    },
+    rpcUrl: 'https://arbitrum-goerli.public.blastapi.io',
+    blockExplorerUrl: 'https://goerli.arbiscan.io',
+    features: [
+      {
+        name: 'EIP1559'
+      }
+    ],
+    pools: [
+      '0xAd19D34eba139c285Ef80cAfA890b2036332D371',
+      '0xCd539eAcEd2289e27Db4882f282acE85ba238448',
+      '0x1807C58220213136daF4898ee7Cd1739b5FC2E3f',
+      '0xB596d41192764a41Cd519Fd818011b2a3D9B6778',
+      '0xd5BAdDE807E059d50fF1d08661Dd77E6a2AfcA98',
+      '0x07651807730c8895113ceC94800d5d46Fca33199',
+      '0x06C237E66e484cC0e13Da7D8Fc24EC1B1fBfC216',
+      '0x1F88e60017C55f3CD3E4d52ac7052da137D9D9CA',
+      '0xABC01b410be5480Bf8d2276eC009c763323B4b4C',
+      '0x4A032FE0EA97B0f57836f06674C4e3c47f42FAF3'
     ]
   },
   {
@@ -266,7 +334,7 @@ const allChains: any[] = [
     chainType: 'evm',
     icon: 'linea.svg',
     fullname: 'Linea Goerli',
-    network: 'Goerli',
+    network: 'Testnet',
     website: 'https://linea.build',
     nativeCurrency: {
       name: 'ETH',
@@ -356,7 +424,8 @@ const allChains: any[] = [
     ]
   },
   {
-    id: 2344859429196833,
+    id: 1,
+    chainId: '0x534e5f4d41494e',
     name: 'Starknet',
     chainType: 'starknet',
     icon: 'starknet.svg',
@@ -369,7 +438,27 @@ const allChains: any[] = [
       decimals: 18
     },
     rpcUrl: 'https://starknet-mainnet.public.blastapi.io',
-    blockExplorerUrl: 'https://starkscan.co/'
+    // rpcUrl: 'https://alpha-mainnet.starknet.io',
+    blockExplorerUrl: 'https://voyager.online',
+    pools: ['0x03bc6c07e1c4bce3c13df3c45b9eb091599c89e966c7190cdd1ed37e07137771']
+  },
+  {
+    id: 0,
+    chainId: '0x534e5f474f45524c49',
+    name: 'Starknet',
+    chainType: 'starknet',
+    icon: 'starknet.svg',
+    fullname: 'Starknet Testnet',
+    network: 'Testnet',
+    website: 'https://starknet.io',
+    nativeCurrency: {
+      name: 'ETH',
+      symbol: 'ETH',
+      decimals: 18
+    },
+    rpcUrl: 'https://starknet-mainnet.public.blastapi.io',
+    blockExplorerUrl: 'https://voyager.online',
+    pools: ['0x03bc6c07e1c4bce3c13df3c45b9eb091599c89e966c7190cdd1ed37e07137771']
   }
 ]
 
@@ -377,11 +466,20 @@ export const ACTIVE_CHAINS: Chain[] = allChains.map((chain) => {
   chain.chainId = '0x' + chain.id.toString(16)
 
   if (!chain.pools) chain.pools = []
+  if (chain.chainType === 'evm') {
+    const network = Network.from(chain.id)
+    chain.provider = new JsonRpcProvider(chain.rpcUrl, network, { staticNetwork: network })
+    chain.contracts = chain.pools.map(
+      (pool: string) => RocketSam__factory.connect(pool, chain.provider) as RocketSam
+    )
+  }
 
-  const network = Network.from(chain.id)
-  chain.provider = new JsonRpcProvider(chain.rpcUrl, network, { staticNetwork: network })
-  chain.contracts = chain.pools.map(
-    (pool: string) => RocketSam__factory.connect(pool, chain.provider) as RocketSam
-  )
+  if (chain.chainType === 'starknet') {
+    chain.provider = new RpcProvider({ nodeUrl: chain.rpcUrl })
+    chain.contracts = chain.pools.map(
+      (pool: string) => new Contract(STARK_ABI, pool, chain.provider)
+    )
+  }
+
   return chain
 })

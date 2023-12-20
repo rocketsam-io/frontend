@@ -12,6 +12,12 @@ import { useEvmStore } from '@/stores/evm'
 import { useOnboard } from '@web3-onboard/vue'
 import { Sam } from '@/onchain/utils'
 import { useConfigStore } from '@/stores/config'
+import { getWallets } from '@/onchain/starknet'
+import { useStarknetStore } from '@/stores/starknet'
+import { Contract, CustomError } from 'starknet'
+import { STARK_ABI } from '@/abi/RocketStark'
+import * as StarknetCore from 'get-starknet-core'
+import type { RocketSam } from '@/types/ethers-contracts'
 
 const { pool } = defineProps<{
   pool: Pool
@@ -21,6 +27,7 @@ const emit = defineEmits(['updatePools'])
 // Tostification
 const toast = useToast()
 const evm = useEvmStore()
+const starknet = useStarknetStore()
 const config = useConfigStore()
 
 const { setChain } = useOnboard()
@@ -39,22 +46,35 @@ type PoolRow = {
   volume: bigint | null
   poolVolume: bigint | null
 }
+
 let rowInfo = ref<PoolRow>({
   balance: null,
   volume: null,
   poolVolume: null
 })
+
 const fetchPool = async (eventMessage: string) => {
   if (pool && pool.contract) {
     if (config.logs) console.log('Fetch pool', eventMessage)
+
     try {
-      rowInfo.value = {
-        balance: evm.address ? await pool.contract.balances(evm.address) : 0n,
-        volume: evm.address ? await pool.contract.addressStatistic(evm.address).then(r => r.depositsVolume) : 0n,
-        poolVolume: await pool.contract.depositsVolume() || 0n
+      if (pool.chain.chainType === 'evm') {
+        const contract = pool.contract as RocketSam
+        rowInfo.value = {
+          balance: evm.address ? await contract.balances(evm.address) : 0n,
+          volume: evm.address ? await contract.addressStatistic(evm.address).then((r: any) => r.depositsVolume) : 0n,
+          poolVolume: await contract.depositsVolume() || 0n
+        }
+      } else {
+        const contract = pool.contract as Contract
+        rowInfo.value = {
+          balance: starknet.address ? await contract.getBalance(starknet.address) : 0n,
+          volume: starknet.address ? await contract.getAddressStatistics(starknet.address).then((r: any) => r.deposits_volume) : 0n,
+          poolVolume: await contract.getDepositsVolume() || 0n
+        }
       }
     } catch (e) {
-      console.error('Chain RPC error!')
+      console.error('Chain RPC error!', e)
     }
   }
 }
@@ -71,8 +91,8 @@ onUnmounted(() => clearInterval(intervalId))
 
 // Withdraw
 const processing = ref(false)
-const withdraw = async () => {
 
+const withdrawFromEVM = async () => {
   // @ts-ignore
   const { ethereum } = window
   const provider = new BrowserProvider(ethereum)
@@ -104,13 +124,46 @@ const withdraw = async () => {
     })
 }
 
+
+const withdrawFromStarknet = async () => {
+
+  const Sam = new Contract(STARK_ABI, pool.address, starknet.wallet.account)
+  processing.value = true
+
+  return Sam
+    .withdraw()
+    .then(async (result: any) => {
+      showToast(`Withdrawing…`, { hash: result.transaction_hash })
+      processing.value = false
+
+      await starknet.wallet.provider.waitForTransaction(result.transaction_hash)
+
+      showToast(`Successful Withdrawal`, { hash: result.transaction_hash })
+      updatePool()
+
+    }).catch((e: CustomError) => {
+      processing.value = false
+      showToast(`Withdrawal Failed`, { error: e.message })
+    })
+}
+
+const withdraw = async () => {
+  console.log('Withdraw from', pool.chain.chainType)
+  return pool.chain.chainType === 'evm'
+    ? withdrawFromEVM()
+    : withdrawFromStarknet()
+}
+
 // Deposit to pool
 const visible = ref(false)
 const toggle = async () => visible.value = !visible.value
 const updatePool = async () => fetchPool('after transaction')
 
 // Visual
-const scan = (pool: Pool) => `${pool.chain.blockExplorerUrl}/address/${pool.address}`
+const scan = (pool: Pool) => pool.chain.chainType === 'evm' ?
+  `${pool.chain.blockExplorerUrl}/address/${pool.address}`
+  : `${pool.chain.blockExplorerUrl}/contract/${pool.address}`
+
 const amount = (value: bigint) => formatUnits(value, pool.chain.nativeCurrency.decimals || 18)
 const format = (value: bigint) => {
   const rounded = !value

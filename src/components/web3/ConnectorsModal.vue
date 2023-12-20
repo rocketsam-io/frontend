@@ -8,29 +8,26 @@ import { ref, watch, defineProps } from 'vue'
 import { useEvmStore } from '@/stores/evm'
 import { useStarknetStore } from '@/stores/starknet'
 
+import * as StarknetCore from 'get-starknet-core'
+import { getStoreVersionFromBrowser } from '@/onchain/utils'
+
 const config = useConfigStore()
 const evm = useEvmStore()
 const starknet = useStarknetStore()
 
+// EVM
 const {
   connectWallet,
   connectedWallet,
   connectedChain,
   disconnectConnectedWallet
-  // alreadyConnectedWallets,
-  // disconnectConnectedWallet,
-  // getChain,
-  // // switchChain,
-  // // connect,
-  // // disconnect,
-  // setChain,
-  // wallets
 } = useOnboard()
 
 let wallet = {
   name: 'Injected Wallet',
   icon: 'blocknative.svg'
 }
+
 // @ts-ignore
 const { ethereum } = window
 
@@ -45,15 +42,54 @@ else if (ethereum?.isMetaMask)
     icon: 'metamask.svg'
   }
 
+// Starknet
+export type starknetWallets = "Argent X" | "Braavos"
+const connectStarknet = async (wallet: starknetWallets) => {
+  console.log('Connecting...', wallet)
+
+  try {
+    const extensions = await StarknetCore.default.getDiscoveryWallets()
+    const availableWallets = await StarknetCore.default.getAvailableWallets()
+
+    const lastConnectedWallet = await StarknetCore.default.getLastConnectedWallet()
+
+    if (config.logs) console.log('lastConnectedWallet', lastConnectedWallet)
+
+    let walletToConnect = undefined
+
+    if (config.logs) console.log(availableWallets)
+
+    walletToConnect = [...availableWallets].find(i => i.name === wallet)
+
+    if (walletToConnect) {
+      const wallet = await StarknetCore.default.enable(walletToConnect, { starknetVersion: "v5" })
+      starknet.setWallet(wallet)
+    } else {
+      // @ts-ignore
+      window.open(extensions.find((i: any) => i.name === wallet).downloads[getStoreVersionFromBrowser()], '_blank')
+    }
+
+    config.setCurrentSiteChain('starknet')
+
+  } catch (error) {
+    if (config.logs) console.log('STARKNET WALLET TOOGLE ERROR', error)
+  }
+}
+
 // Connect actions
-const connect = async (namespace: 'evm' | 'starknet', wallet?: string) => {
+const connect = async (namespace: 'evm' | 'starknet', wallet?: starknetWallets) => {
   emit('toggle')
   if (namespace === 'evm') await connectWallet()
-  // if (namespace === 'starknet') await connectStarknet(wallet)
+  if (namespace === 'starknet' && wallet) await connectStarknet(wallet)
 }
+
 const disconnect = async (namespace: 'evm' | 'starknet') => {
   emit('toggle')
   if (namespace === 'evm') await disconnectConnectedWallet()
+  if (namespace === 'starknet') {
+    await StarknetCore.default.disconnect({ clearLastWallet: true })
+    starknet.setWallet(null)
+  }
 }
 
 const props = defineProps(['active'])
@@ -81,12 +117,14 @@ const emit = defineEmits(['toggle'])
     .field
       .subtitle StarkNet
         IconConnected.icon(:class="{'is-active': starknet.wallet }")
+        .disconnect(v-if="starknet.wallet" @click="disconnect('starknet')") Disconnect
+
       .buttons
-        .button.is-fullwidth.is-ghost.is-normal.is-justify-content-left.is-rounded(@click="connect('starknet', 'argent')" disabled="true")
+        .button.is-fullwidth.is-ghost.is-normal.is-justify-content-left.is-rounded(@click="connect('starknet', 'Argent X')")
           .icon
             img(src="/assets/wallets/argent.svg")
           span Argent X
-        .button.is-fullwidth.is-ghost.is-normal.is-justify-content-left.is-rounded(@click="connect('starknet', 'braavos')" disabled="true")
+        .button.is-fullwidth.is-ghost.is-normal.is-justify-content-left.is-rounded(@click="connect('starknet', 'Braavos')")
           .icon
             img(src="/assets/wallets/braavos.svg")
           span Braavos

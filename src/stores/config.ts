@@ -17,7 +17,6 @@ export const useConfigStore = defineStore('config', {
     settings: {
       fuel: parseFloat(import.meta.env.VITE_FUEL) || 1,
       season: parseInt(import.meta.env.VITE_SEASON) || 1,
-      starknet: import.meta.env.VITE_STARKNET === 'true' || false,
       boost: import.meta.env.VITE_BOOST === 'true' || false,
       dafault: parseInt(import.meta.env.VITE_DEFAULT_CHAIN) || 42170
     },
@@ -73,8 +72,9 @@ export const useConfigStore = defineStore('config', {
     },
     init() {
       try {
-        const active = import.meta.env.VITE_ACTIVE_CHAINS.split(',').map((i: string) => Number(i))
-        this.chains = ACTIVE_CHAINS.filter((i) => active.includes(i.id) && i.pools.length > 0)
+        this.chains = ACTIVE_CHAINS.filter(
+          (i) => i.network === import.meta.env.VITE_ACTIVE_CHAINS && i.pools.length > 0
+        )
 
         this.setCurrentSiteChain(this.settings.dafault)
       } catch (error) {

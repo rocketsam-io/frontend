@@ -29,7 +29,6 @@ const poolNames = [
   'Delta IV Heavy',
 ]
 
-const loading = ref<boolean>(true)
 const pools = ref<Pool[]>([])
 const currency = ref<Currency>({
   name: 'ETH',
@@ -43,16 +42,14 @@ currency.value = config.currentChain.nativeCurrency
 const fetchPools = async (eventMessage: string) => {
   const chain = config.currentChain
   if (config.logs) console.log('Fetch RocketSam Pools for', chain.fullname, 'after', eventMessage)
-  loading.value = true
-  const data = chain.contracts
+
+  pools.value = chain.contracts
     .map((contract, i) => ({
       name: poolNames[i],
       address: chain.pools[i],
       contract: contract,
       chain: chain
     }))
-  pools.value = await Promise.all(data)
-  loading.value = false
 }
 const newChainFetchPools = (eventMessage: string) => {
   pools.value = []

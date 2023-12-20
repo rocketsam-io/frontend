@@ -9,15 +9,18 @@ import { useConfigStore } from '@/stores/config'
 import { watch } from 'vue'
 import { useEvmStore } from '@/stores/evm'
 import type { ConnectedChain, WalletState } from '@web3-onboard/core'
+import { getStarknet } from 'get-starknet-core'
+import { useStarknetStore } from './stores/starknet'
 
 const config = useConfigStore()
 const evm = useEvmStore()
+const starknet = useStarknetStore()
 
-// Initialize chains
+// Initialize All active chains
 config.init()
 if (config.logs) console.log('Active chains:', config.onboardChains.map(i => i.label).join(', '))
 
-// Initalize connector
+// Initalize EVM connector
 const injected = injectedModule()
 init({
   wallets: [injected],
@@ -46,9 +49,20 @@ watch(connectedWallet, (wallet: WalletState | null) => {
   if (config.logs) console.log('Set wallet from provider', wallet)
   if (wallet) evm.setWallet(wallet)
 })
+
 watch(connectedChain, (chain: ConnectedChain | null) => {
   if (config.logs) console.log('Set chain from provider', chain)
   if (chain) evm.setChain(chain.id)
+})
+
+// Initalize Starknet Wallet
+
+getStarknet().getLastConnectedWallet().then(async (wallet) => {
+  if (wallet) {
+    if (config.logs) console.log('Set starknet wallet', wallet.name)
+    wallet = await getStarknet().enable(wallet, { starknetVersion: 'v5' })
+    starknet.setWallet(wallet)
+  }
 })
 
 </script>

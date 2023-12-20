@@ -10,7 +10,7 @@
         span.icon
           img(:src="'/assets/chains/' + chain.icon")
         span {{ chain.fullname }}
-        IconCheck.check(:class="chain.id === parseInt(connectedChain?.id) ? 'is-active' : ''")
+        IconCheck.check(:class="chain.id === parseInt(config.currentChain?.id) ? 'is-active' : ''")
 
 </template>
 
@@ -30,7 +30,8 @@ const config = useConfigStore()
 const evm = useEvmStore()
 
 const changeChain = (chain: Chain) => {
-  if (connectedWallet?.value?.label) setChain({ wallet: connectedWallet.value.label, chainId: chain.chainId })
+  if (connectedWallet?.value?.label && chain.chainType === 'evm')
+    setChain({ wallet: connectedWallet.value.label, chainId: chain.chainId })
   config.setCurrentSiteChain(chain.id)
 }
 

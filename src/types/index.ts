@@ -1,5 +1,6 @@
 import type { JsonRpcApiProvider } from 'ethers'
 import type { RocketSam } from './ethers-contracts'
+import type { Contract } from 'starknet'
 
 export type Currency = {
   name: string
@@ -23,12 +24,12 @@ export type Chain = {
   features?: { name: string }[]
   provider: JsonRpcApiProvider
   pools: string[]
-  contracts: RocketSam[]
+  contracts: RocketSam[] | Contract[]
 }
 
 export type Pool = {
   address: string
-  contract: RocketSam
+  contract: RocketSam | Contract
   chain: Chain
 }
 
