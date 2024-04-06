@@ -262,6 +262,23 @@ const allChains: any[] = [
     ]
   },
   {
+    id: 34443,
+    name: 'Mode Mainnet',
+    chainType: 'evm',
+    icon: 'mode.svg',
+    fullname: 'Mode',
+    network: 'Mainnet',
+    website: 'https://www.mode.network',
+    nativeCurrency: {
+      name: 'Ether',
+      symbol: 'ETH',
+      decimals: 18
+    },
+    rpcUrl: 'https://mode.drpc.org',
+    blockExplorerUrl: 'https://modescan.io',
+    pools: ['0x80C7E6B91a33b2D956F01092B1E60EEc6e957dc9']
+  },
+  {
     id: 59140,
     name: 'Linea',
     chainType: 'evm',
@@ -364,6 +381,7 @@ export const ACTIVE_CHAINS: Chain[] = allChains.map((chain) => {
   if (!chain.pools) chain.pools = []
 
   const network = Network.from(chain.id)
+  console.log(network)
   chain.provider = new JsonRpcProvider(chain.rpcUrl, network, { staticNetwork: network })
   chain.contracts = chain.pools.map(
     (pool: string) => RocketSam__factory.connect(pool, chain.provider) as RocketSam
