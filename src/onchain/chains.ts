@@ -263,7 +263,7 @@ const allChains: any[] = [
   },
   {
     id: 34443,
-    name: 'Mode Mainnet',
+    name: 'Mode',
     chainType: 'evm',
     icon: 'mode.svg',
     fullname: 'Mode',
